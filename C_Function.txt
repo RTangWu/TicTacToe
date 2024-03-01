@@ -1,0 +1,108 @@
+// Welcome to Robert Tang Wu  version of tic-tac-toe-procedural paradigm
+#include <stdio.h>
+//  00 01 02 03
+//  04 05 06 07
+//  08 09 10 11
+
+//set up the wining combos for the game
+int winning_row_combos[3][4] = {{0,1,2,3},{4,5,6,7},{8,9,10,11}};
+int winning_colDia_combos[8][3] = {{0,4,8},{1,5,9},{2,6,10},{3,7,11},{0,5,10},{1,6,11},{2,5,8},{3,6,9}};
+//set up board to 3x4 and current player  
+char board[12] = {'-','-','-','-','-','-','-','-','-','-','-','-',};
+int player = 0;
+//display the board 
+void displayBoard(char board[12])
+{
+    printf("~~~~~~~~~~~~~~~\n");
+    printf(" %c | %c | %c | %c \n",board[0],board[1],board[2],board[3]);
+    printf(" \n");
+    printf(" %c T %c T %c T %c \n",board[4],board[5],board[6],board[7]);
+    printf(" \n");
+    printf(" %c | %c | %c | %c \n",board[8],board[9],board[10],board[11]);
+    printf("~~~~~~~~~~~~~~~\n");
+   
+  
+}
+
+int winner(char board[12])
+{
+ // check the player has met the win requirements if yes then return 1 and 1 mean win
+    for(int row_combo = 0; row_combo <3; row_combo++){
+        if (board[winning_row_combos[row_combo][0]] == board[winning_row_combos[row_combo][1]] && board[winning_row_combos[row_combo][1]] == board[winning_row_combos[row_combo][2]] && board[winning_row_combos[row_combo][2]] == board[winning_row_combos[row_combo][3]] && board[winning_row_combos[row_combo][0]] != '-') {
+                return 1; 
+            }
+        }
+    for(int colDia_combo = 0; colDia_combo <8; colDia_combo++){
+        if (board[winning_colDia_combos[colDia_combo][0]] == board[winning_colDia_combos[colDia_combo][1]] && board[winning_colDia_combos[colDia_combo][1]] == board[winning_colDia_combos[colDia_combo][2]] && board[winning_colDia_combos[colDia_combo][0]] != '-') {
+                return 1; 
+            }
+        }
+//this for loop is check for draw so when the borad have no more "-" then will return 2 and 2 mean draw
+        for (int i = 0; i < 12; i++) {
+        if (board[i] == '-')
+            return 0; //Continue playing
+    }
+    return 2;
+}
+
+int player_move(char board[12], int player) {
+    int position;
+    displayBoard(board);
+    // this while loop is the vaildation of the player input so if the player input letter and number outside the 1-12 then will ask them to input again
+while(1){
+        // Get player input
+        printf("Player %c's turn. Enter your move (1-12): ", (player == 0) ? 'R' : 'W');
+       if(scanf("%d", &position) != 1){
+            while(getchar() !='\n'); 
+            printf("Invalid move. Please enter a valid number (1-12).\n");
+       }else{
+        position--;
+        // this to make range start from 1-12 not 0-11
+       
+    
+        // Check if the input is valid and the cell is empty
+        if (position < 0 || position >= 12 || board[position] != '-') {
+            printf("Invalid move. Try again.\n");
+            
+        }else{
+    
+            // Update the board with the player's move
+            board[position] = (player == 0) ? 'R' : 'W';
+            break;
+            }
+        } 
+    
+    }
+}
+
+
+            
+void game()
+{
+     printf("Welcome to the version 21370916 tic-tac-toe game\n");
+    // this while loop is for the game round 
+    while (1) {
+        if (player_move(board, player)) {
+            int result = winner(board);
+            if (result == 1) {
+                displayBoard(board);
+                printf("Player %c wins!\n", (player == 0) ? 'R' : 'W');
+                break;
+            } else if (result == 2) {
+                displayBoard(board);
+                printf("It's a draw!\n");
+                break;
+            }
+            // Switch to the other player
+            player = !player; 
+        }
+    }
+}
+
+
+
+int main()
+{
+   game();
+   //run the game
+}
